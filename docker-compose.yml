@@ -1,0 +1,40 @@
+version: '3'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+      - ./wordpress:/var/www/html
+    networks:
+      - wp_network
+    links:
+      - wordpress
+    restart: always
+  wordpress:
+    image: wordpress:4.9.7-fpm-alpine
+    volumes:
+      - ./wordpress:/var/www/html
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - wp_network
+    environment:
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_TABLE_PREFIX=wp_
+      - WORDPRESS_DB_HOST=mysql
+      - WORDPRESS_DB_PASSWORD=password
+    links:
+      - mysql
+  mysql:
+    image: mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - wp_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: always
+networks:
+  wp_network:
