@@ -8,7 +8,7 @@ development experiments. To keep things simple only **HTTP** is supported.
 Clone the repository:
 
 ```bash
-git clone http://
+git clone https://github.com/mihkels/wordpress-docker-compose
 ``` 
 
 Change to cloned directory and run `docker-compose`
